@@ -42,3 +42,42 @@
 # ensure that MongoDB will start following a system reboot by issuing the following command:
 #
 # sudo chkconfig mongod on#
+#
+case node['kernel']['machine']
+  when "x86_64"
+     puts "This is RHEL 64 bit"
+
+     # Create Mongo-DB repo
+     cookbook_file '/etc/yum.repos.d/mongodb.repo' do
+       source 'mongodb_64.repo'
+       mode '0755'
+       action :create
+     end
+
+     # Install the MongoDB packages
+     yum_package 'mongodb-org'
+      
+     # Start MongoDB
+     service 'mongod' do
+       supports :status => true, :restart => true, :reload => true
+       action [ :enable, :start ]
+     end
+  when "i686"
+     puts "This is RHEL 32 bit"
+
+     # Create Mongo-DB repo
+     cookbook_file '/etc/yum.repos.d/mongodb.repo' do
+       source 'mongodb_32.repo'
+       mode '0755'
+       action :create
+     end
+     
+     # Install the MongoDB packages
+     yum_package 'mongodb-org'
+
+     # Start MongoDB
+     service 'mongod' do
+       supports :status => true, :restart => true, :reload => true 
+       action [ :enable, :start ]
+     end
+end
