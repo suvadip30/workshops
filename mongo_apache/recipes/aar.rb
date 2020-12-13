@@ -13,6 +13,11 @@ apt_package "apache2" do
   action :install
 end
 
+#Install Python 2.7
+apt_package "python" do
+  action :install
+end
+
 # Create database queries
 cookbook_file '/tmp/mysql_secure_installation.sql' do
   action :create
@@ -54,9 +59,9 @@ end
 
 # Untar Awesome Appliance Installer
 execute "Unzip Awesome Appliance Installer" do
-  command "unzip /tmp/master.zip"
+  command "unzip /tmp/master.zip -d /tmp"
   action :run
-  not_if { ::File.exist?('/tmp/master.zip')}
+  not_if { ::File.exist?('/tmp/Awesome-Appliance-Repair-master')}
 end
 
 # Start and Enable service
@@ -65,15 +70,43 @@ service "apache2" do
    action [ :enable, :start ]
 end
 
+template "/tmp/Awesome-Appliance-Repair-master/AARinstall.py" do
+  source "AARinstall.py.erb"
+end
 # Move AAR to www directory
 execute "Move AAR directory" do
   command <<-EOF
-    cd Awesome-Appliance-Repair-master/
+    cd /tmp/Awesome-Appliance-Repair-master/
     mv AAR /var/www/
+  EOF
+  action :run
+  not_if { ::File.exist?('/var/www/AAR')}
+end
+
+# Execute AARinstall
+execute "Execute AARinstall" do
+  command <<-EOF
+    cd /tmp/Awesome-Appliance-Repair-master/
     python AARinstall.py
   EOF
   action :run
+#  not_if  "mysql -u root -e \"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'AARdb'\""
+  not_if "mysql -u root -e \"select table_name from information_schema.tables where table_schema = 'AARdb'\" | grep customer"
 end
+#template "/etc/apache2/sites-available/aar.conf" do
+#    source "aar.conf.erb"
+#end
+
+#link "/etc/apache2/sites-enabled/aar.conf" do
+#  to "/etc/apache2/sites-available/aar.conf"
+#  notifies :restart, "service[apache2]"
+#end
+
+#link "/etc/apache2/sites-enabled/000-default.conf" do
+#  to "/etc/apache2/sites-available/000-default.conf"
+#  action :delete
+#  notifies :restart, "service[apache2]"
+#end
 
 # Start and Enable service
 service "apache2" do
