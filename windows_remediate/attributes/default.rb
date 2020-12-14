@@ -1,0 +1,5 @@
+default['security_policy']['template']['location'] = 'C:\Windows\security\templates'
+default['security_policy']['database']['location'] = 'C:\Windows\security\database'
+default['security_policy']['database']['name'] = 'hardening.sdb'
+default['security_policy']['rights']['SeRemoteInteractiveLogonRight']       = '*S-1-5-32-544, *S-1-5-32-555'
+default['security_policy']['rights']['SeInteractiveLogonRight'] = '*S-1-5-32-545, *S-1-5-32-551, *S-1-5-32-544'

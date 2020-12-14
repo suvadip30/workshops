@@ -1,6 +1,6 @@
-cookbook_file '/tmp/AARinstall.py' do
-  action :create
-end
+#cookbook_file '/tmp/AARinstall.py' do
+#  action :create
+#end
 
 # Update apt
 apt_update "Update the apt" do
