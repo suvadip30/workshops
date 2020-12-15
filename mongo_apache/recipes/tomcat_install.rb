@@ -1,3 +1,7 @@
+#
+# Cookbook Name:: mongodb
+# Recipe:: tomcat_install
+
 case node['platform']
     when 'rhel', 'amazon', 'fedora'
           puts '************RHEL'

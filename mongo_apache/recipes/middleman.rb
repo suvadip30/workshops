@@ -7,7 +7,7 @@ apt_update "Update the apt" do
 end
 
 # Install Ruby
-#include_recipe 'mongo_apache::ruby'
+include_recipe 'mongo_apache::ruby'
 
 # Install Apache2
 apt_package "apache2" do

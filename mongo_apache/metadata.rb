@@ -1,6 +1,6 @@
 name 'mongo_apache'
-maintainer 'The Authors'
-maintainer_email 'you@example.com'
+maintainer 'Suvadip Mandal'
+maintainer_email 'suvadipmandal@gmail.com'
 license 'All Rights Reserved'
 description 'Installs/Configures mongo_apache'
 version '0.1.0'
